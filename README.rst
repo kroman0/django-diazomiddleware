@@ -3,6 +3,9 @@ Django DiazoMiddleware
 ======================
 Integrate Diazo in Django using Django middleware mechanism
 
+.. image:: https://travis-ci.org/kroman0/django-diazomiddleware.png?branch=master
+   :target: https://travis-ci.org/kroman0/django-diazomiddleware
+
 ************
 Installation
 ************
