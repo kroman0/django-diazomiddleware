@@ -97,18 +97,19 @@ def compileThemeTransform(rules, absolutePrefix=None, read_network=False,
                  ['url', 'base', 'path', 'scheme', 'host'])
     xslParams = dict((k, '') for k in params)
 
-    compiledTheme = compile_theme(rules,
-                                  absolute_prefix=absolutePrefix,
-                                  parser=getParser('theme', read_network),
-                                  rules_parser=getParser('rules', read_network),
-                                  compiler_parser=getParser(
-                                      'compiler', read_network),
-                                  read_network=read_network,
-                                  access_control=accessControl,
-                                  update=True,
-                                  xsl_params=xslParams,
-                                  runtrace=runtrace,
-                                  )
+    compiledTheme = compile_theme(
+        rules,
+        absolute_prefix=absolutePrefix,
+        parser=getParser('theme', read_network),
+        rules_parser=getParser('rules', read_network),
+        compiler_parser=getParser(
+            'compiler', read_network),
+        read_network=read_network,
+        access_control=accessControl,
+        update=True,
+        xsl_params=xslParams,
+        runtrace=runtrace,
+    )
 
     if not compiledTheme:
         return None
@@ -194,7 +195,8 @@ def isThemeEnabled(request, response, settings=None):
         return False
 
     # Check for diazo.off request parameter
-    if (DevelopmentMode and request.GET.get(u'diazo.off', u'').lower() in TRUE):
+    if (DevelopmentMode and
+            request.GET.get(u'diazo.off', u'').lower() in TRUE):
         return False
 
     if not settings.get('enabled') or not settings.get('rules'):
@@ -297,13 +299,13 @@ def setupTransform(request, response, runtrace=False):
         transform = CACHE.get(0)
 
     if transform is None:
-        rules = settings.get('rules')
-        absolutePrefix = settings.get('prefix') or None
-        read_network = settings.get('read_network')
-        parameterExpressions = settings.get('parameter_expressions')
-
         transform = compileThemeTransform(
-            rules, absolutePrefix, read_network, parameterExpressions, runtrace=runtrace)
+            rules=settings.get('rules'),
+            absolutePrefix=settings.get('prefix') or None,
+            read_network=settings.get('read_network'),
+            parameterExpressions=settings.get('parameter_expressions'),
+            runtrace=runtrace
+        )
         if transform is None:
             return None
 
@@ -334,7 +336,8 @@ class DiazoMiddleware(object):
         if result is None:
             return response
 
-        runtrace = (DevelopmentMode and request.GET.get(u'diazo.debug', u'').lower() in TRUE)
+        runtrace = (DevelopmentMode and
+                    request.GET.get(u'diazo.debug', u'').lower() in TRUE)
 
         try:
             etree.clear_error_log()
